@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}
+  Images Bookmarked
+{% endblock title %}
+
+{% block content %}
+<h1>Images bookmarked</h1>
+<div id="image-list">
+    {% include "images/image/list_images.html" %}
+</div>
+<p class="no_feeds" style="display: none;">No more Feeds to load</p>
+{% endblock content %}
+
+{% block domready %}
+  {% include "pagination.js" %}
+{% endblock domready %}
