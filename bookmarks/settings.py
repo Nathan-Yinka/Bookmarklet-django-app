@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path,os
 from django.urls import reverse_lazy
+from dotenv import load_dotenv
+
+# load the environment variable into path from the .env
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -41,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'social_django',
     'django_extensions',
+    "debug_toolbar",
     
     "images.apps.ImagesConfig",
     'easy_thumbnails',
@@ -49,6 +54,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -165,21 +171,33 @@ SOCIAL_AUTH_PIPELINE = [
  'social_core.pipeline.social_auth.associate_user',
  'social_core.pipeline.social_auth.load_extra_data',
  'social_core.pipeline.user.user_details', 
- ]
+]
 
-SOCIAL_AUTH_FACEBOOK_KEY = '6667018846688077'
-SOCIAL_AUTH_FACEBOOK_SECRET = '8e51d34ddee50af4181c26670f2f8a34'
+SOCIAL_AUTH_FACEBOOK_KEY = os.getenv('SOCIAL_AUTH_FACEBOOK_KEY')
+SOCIAL_AUTH_FACEBOOK_SECRET = os.getenv('SOCIAL_AUTH_FACEBOOK_SECRET')
+
+SOCIAL_AUTH_TWITTER_KEY = os.getenv('SOCIAL_AUTH_TWITTER_KEY')
+SOCIAL_AUTH_TWITTER_SECRET = os.getenv('SOCIAL_AUTH_TWITTER_SECRET')
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
 
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
-
-SOCIAL_AUTH_TWITTER_KEY = '9SdxfiYlhsG47LPpPQytxEkto' # Twitter API Key
-SOCIAL_AUTH_TWITTER_SECRET = 'cxZSc1mljmqYJ5hEm6ZjzbHxPHerVefJBufo5tnZXUaodqARgB' # Twitter API Secret
-
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '822209448632-uqnhoa76m72o28eenke6uslafmevrkvt.apps.googleusercontent.com' # Google Client ID
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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' # Google Client Secret
 
 
 ABSOLUTE_URL_OVERRIDES = {
  'auth.user': lambda u: reverse_lazy('user_detail',
  args=[u.username])
 }
+
+INTERNAL_IPS = [
+    # ...
+    "127.0.0.1",
+    # ...
+]
+
+
+# Redis configruation setting
+REDIS_HOST = 'localhost'
+REDIS_PORT = 6379
+REDIS_DB = 0
